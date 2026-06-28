@@ -16,7 +16,7 @@ export async function getUser() {
     });
     if (res.ok) {
       const { data } = await res.json();
-      return { user: data.user, token };
+      return { user: data.usuario, token };
     }
   } catch(e) {}
   
@@ -34,13 +34,13 @@ export async function loginUser(email: string, password?: string) {
     
     if (result.success && result.data) {
       const cookieStore = await cookies();
-      cookieStore.set('auth_token', result.data.session.access_token, {
+      cookieStore.set('auth_token', result.data.token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         maxAge: 60 * 60 * 24 * 7,
         path: '/',
       });
-      return { user: result.data.user, error: null };
+      return { user: result.data.usuario, error: null };
     }
     return { user: null, error: new Error(result.message || 'Error') };
   } catch (error) {
