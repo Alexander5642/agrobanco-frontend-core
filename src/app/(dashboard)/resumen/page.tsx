@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation'
 export const dynamic = 'force-dynamic';
 
 export default async function DashboardPage() {
-  const { user } = await getUser()
+  const { user, token } = await getUser()
 
   if (!user) {
     redirect('/login')
@@ -23,18 +23,27 @@ export default async function DashboardPage() {
   let creditos: any[] = [];
   
   try {
-    const resResumen = await fetch(`${apiUrl}/cuentas/resumen?userId=${user.id}`);
+    const resResumen = await fetch(`${apiUrl}/cuentas/mis-cuentas`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    
     if (resResumen.ok) {
-      const data = await resResumen.json();
-      if (data.cuentas && data.cuentas.length > 0) {
-        cuenta = data.cuentas[0];
+      const response = await resResumen.json();
+      if (response.success && response.data && response.data.cuentas && response.data.cuentas.length > 0) {
+        cuenta = response.data.cuentas[0];
         movimientos = cuenta.movimientos || [];
       }
     }
     
-    const resCreditos = await fetch(`${apiUrl}/creditos?userId=${user.id}`);
+    const resCreditos = await fetch(`${apiUrl}/creditos/mis-creditos`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    
     if (resCreditos.ok) {
-      creditos = await resCreditos.json();
+      const response = await resCreditos.json();
+      if (response.success && response.data) {
+        creditos = response.data;
+      }
     }
   } catch (error) {
     console.error("Error fetching data from API:", error);

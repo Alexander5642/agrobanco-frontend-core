@@ -39,13 +39,18 @@ export default function ResumenClient({
   const movimientosRecientes = movimientosFiltrados.slice(0, 5) // Muestra los últimos 5 del periodo
   
   const formatMoney = (amount: number) => `S/ ${Number(amount).toFixed(2)}`
+  
+  const hour = new Date().getHours()
+  let greeting = 'Buenos días'
+  if (hour >= 12 && hour < 19) greeting = 'Buenas tardes'
+  else if (hour >= 19 || hour < 6) greeting = 'Buenas noches'
 
   return (
     <div className="max-w-6xl mx-auto flex flex-col gap-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-4 gap-4">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
-            Buenas noches, <span className="text-brand">{user.nombres}</span> <span className="text-2xl">👋</span>
+            {greeting}, <span className="text-brand">{user.nombre || user.nombres}</span> <span className="text-2xl">👋</span>
           </h1>
           <p className="text-gray-500 mt-2">Aquí tienes el resumen interactivo de tu actividad</p>
         </div>
