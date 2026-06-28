@@ -211,29 +211,29 @@ export default function LandingPage() {
             {audience === 'productor' && (
               <>
                 <div className="bg-white rounded-2xl border border-gray-200 hover:shadow-xl transition-all group relative overflow-hidden flex flex-col">
-                  <div className="h-48 bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1560493676-04071c5f467b?auto=format&fit=crop&w=800&q=80')" }}></div>
+                  <div className="h-48 bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=800&q=80')" }}></div>
                   <div className="p-8 flex-1 flex flex-col">
-                    <h4 className="text-xl font-bold text-gray-900 mb-3">Crédito Mujer Rural</h4>
-                    <p className="text-gray-600 mb-6 text-sm flex-1">Condiciones preferenciales para impulsar los proyectos liderados por mujeres campesinas en todo el Perú.</p>
+                    <h4 className="text-xl font-bold text-gray-900 mb-3">Crédito Agrícola</h4>
+                    <p className="text-gray-600 mb-6 text-sm flex-1">Financia los costos directos para la instalación, sostenimiento o cosecha de tus cultivos agrícolas a nivel nacional.</p>
                     <Link href="/registro" className="text-[#008c4a] font-bold flex items-center gap-2 hover:underline">Solicitar ahora <ChevronRight className="w-4 h-4" /></Link>
                   </div>
                 </div>
 
                 <div className="bg-white rounded-2xl border border-gray-200 hover:shadow-xl transition-all group relative overflow-hidden flex flex-col">
-                  <div className="h-48 bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1592982537447-6f2a6a0a38e5?auto=format&fit=crop&w=800&q=80')" }}></div>
+                  <div className="h-48 bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1516467508483-a7212febe31a?auto=format&fit=crop&w=800&q=80')" }}></div>
                   <div className="p-8 flex-1 flex flex-col">
-                    <h4 className="text-xl font-bold text-gray-900 mb-3">Crédito Agropecuario</h4>
-                    <p className="text-gray-600 mb-6 text-sm flex-1">Financia tus campañas agrícolas o pecuarias con tasas accesibles y asesoría técnica especializada.</p>
+                    <h4 className="text-xl font-bold text-gray-900 mb-3">Crédito Pecuario</h4>
+                    <p className="text-gray-600 mb-6 text-sm flex-1">Capital de trabajo destinado a la crianza, engorde o producción de ganado y especies menores.</p>
                     <Link href="/registro" className="text-blue-600 font-bold flex items-center gap-2 hover:underline">Conoce más <ChevronRight className="w-4 h-4" /></Link>
                   </div>
                 </div>
 
                 <div className="bg-white rounded-2xl border border-gray-200 hover:shadow-xl transition-all group relative overflow-hidden flex flex-col">
-                  <div className="h-48 bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1589758438368-0ad531db3366?auto=format&fit=crop&w=800&q=80')" }}></div>
+                  <div className="h-48 bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1560493676-04071c5f467b?auto=format&fit=crop&w=800&q=80')" }}></div>
                   <div className="p-8 flex-1 flex flex-col">
-                    <h4 className="text-xl font-bold text-gray-900 mb-3">AgroTarjeta</h4>
-                    <p className="text-gray-600 mb-6 text-sm flex-1">Medio de pago gremial exclusivo. Compra fertilizantes y maquinaria con tasa especial.</p>
-                    <Link href="/registro" className="text-orange-600 font-bold flex items-center gap-2 hover:underline">Adquirir tarjeta <ChevronRight className="w-4 h-4" /></Link>
+                    <h4 className="text-xl font-bold text-gray-900 mb-3">Fondo Agroperú</h4>
+                    <p className="text-gray-600 mb-6 text-sm flex-1">Programa inclusivo con tasa de interés preferencial (3.5% TEA) exclusivo para el pequeño productor agropecuario organizado.</p>
+                    <Link href="/registro" className="text-orange-600 font-bold flex items-center gap-2 hover:underline">Evaluar requisitos <ChevronRight className="w-4 h-4" /></Link>
                   </div>
                 </div>
               </>
