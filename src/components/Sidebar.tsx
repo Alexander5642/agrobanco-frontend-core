@@ -22,7 +22,7 @@ export default function Sidebar() {
   return (
     <aside className="w-64 bg-white border-r border-gray-100 flex flex-col h-screen sticky top-0 shrink-0">
       <div className="bg-brand p-6 text-white flex items-center gap-3">
-        <Leaf className="w-6 h-6 text-brand-accent" />
+        <img src="/logo.png" alt="Agrobanco Logo" className="w-6 h-6 text-brand-accent object-contain" />
         <div>
           <h1 className="font-bold text-lg leading-tight">Agrobanco</h1>
           <p className="text-xs text-brand-accent opacity-90">Banca Digital</p>

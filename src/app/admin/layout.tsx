@@ -24,7 +24,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         <div className="h-20 flex items-center px-6 border-b border-white/10 shrink-0">
           <div className="flex items-center gap-3">
             <div className="bg-brand p-2 rounded-lg">
-              <Leaf className="w-5 h-5 text-white" />
+              <img src="/logo.png" alt="Agrobanco Logo" className="w-5 h-5 text-white object-contain" />
             </div>
             <div>
               <h1 className="font-bold text-lg leading-none">Agrobanco</h1>

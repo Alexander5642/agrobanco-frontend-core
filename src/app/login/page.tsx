@@ -18,7 +18,7 @@ function LoginForm() {
       {/* Header Logo */}
       <div className="flex flex-col items-center justify-center mb-8">
         <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mb-4 shadow-lg border border-gray-100">
-          <Leaf className="w-8 h-8 text-[#008c4a]" />
+          <img src="/logo.png" alt="Agrobanco Logo" className="w-8 h-8 text-[#008c4a] object-contain" />
         </div>
         <h1 className="text-3xl font-bold text-[#006132] tracking-tight">CoreFinanciero</h1>
         <p className="text-[#008c4a] text-xs font-bold tracking-[0.2em] mt-1 uppercase">Agrobanco Perú</p>
