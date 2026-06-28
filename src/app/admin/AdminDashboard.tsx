@@ -271,6 +271,45 @@ export default function AdminDashboard({ data }: { data: any }) {
           </table>
         </div>
       </div>
+      {/* Tabla de Contactos / Leads */}
+      <div className="mt-8 bg-white p-6 rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-8">
+        <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+          <Users className="w-5 h-5 text-blue-500" />
+          Solicitudes de Contacto (Leads)
+        </h2>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-sm text-gray-600">
+            <thead className="bg-gray-50 text-xs uppercase font-semibold text-gray-500 rounded-t-lg">
+              <tr>
+                <th className="px-6 py-4 rounded-tl-lg">Fecha</th>
+                <th className="px-6 py-4">Nombre Completo</th>
+                <th className="px-6 py-4">Teléfono</th>
+                <th className="px-6 py-4">Email</th>
+                <th className="px-6 py-4 rounded-tr-lg">Mensaje</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              {(!data.contactosLista || data.contactosLista.length === 0) ? (
+                <tr>
+                  <td colSpan={5} className="px-6 py-8 text-center text-gray-400 font-medium">No hay solicitudes de contacto recientes.</td>
+                </tr>
+              ) : (
+                data.contactosLista.map((c: any, i: number) => (
+                  <tr key={i} className="hover:bg-gray-50 transition-colors group cursor-pointer">
+                    <td className="px-6 py-4 text-xs text-gray-400 whitespace-nowrap">
+                      {new Date(c.fecha).toLocaleDateString()} {new Date(c.fecha).toLocaleTimeString()}
+                    </td>
+                    <td className="px-6 py-4 font-bold text-gray-900">{c.nombre}</td>
+                    <td className="px-6 py-4 text-[#008c4a] font-medium">{c.telefono}</td>
+                    <td className="px-6 py-4">{c.email}</td>
+                    <td className="px-6 py-4 text-xs max-w-xs truncate" title={c.mensaje}>{c.mensaje}</td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   )
 }

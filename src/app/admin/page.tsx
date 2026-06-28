@@ -40,8 +40,22 @@ export default async function AdminIndex() {
     ratioMora: total > 0 ? ((vencida / total) * 100).toFixed(1) : 57.7,
     numCreditos: creditos?.length || 22,
     numClientes: numClientes || 22,
-    creditosLista: creditosConUsuarios
+    creditosLista: creditosConUsuarios,
+    contactosLista: [] // Fallback
   };
+
+  try {
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
+    const res = await fetch(`${API_URL}/contactos`, { cache: 'no-store' });
+    if (res.ok) {
+      const result = await res.json();
+      if (result.success) {
+        dashboardData.contactosLista = result.data;
+      }
+    }
+  } catch (error) {
+    console.error("Error fetching contactos:", error);
+  }
 
   return (
     <div className="p-8 max-w-7xl mx-auto min-h-screen font-sans bg-slate-50">

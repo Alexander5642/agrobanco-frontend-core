@@ -159,6 +159,77 @@ function LoginForm() {
   )
 }
 
+const CAROUSEL_SLIDES = [
+  {
+    image: 'https://images.unsplash.com/photo-1625246333195-78d9c38ad449?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+    title: 'Cultivamos el Futuro del Perú',
+    description: 'Financiamiento hecho a la medida para los agricultores y ganaderos peruanos.'
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1559884743-74a57598c6c7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+    title: 'Impulso a la Microempresa',
+    description: 'Créditos rápidos y seguros para que tu negocio nunca deje de crecer.'
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1528698827591-e19ccd7bc23d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+    title: 'Banca Virtual Segura',
+    description: 'Transacciones 100% protegidas desde cualquier lugar, las 24 horas del día.'
+  }
+];
+
+function LoginCarousel() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % CAROUSEL_SLIDES.length);
+    }, 5000); // Cambia cada 5 segundos
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div className="w-full h-full relative">
+      {CAROUSEL_SLIDES.map((slide, idx) => (
+        <div
+          key={idx}
+          className={`absolute inset-0 transition-opacity duration-1000 ${
+            idx === currentSlide ? 'opacity-100 z-10' : 'opacity-0 z-0'
+          }`}
+        >
+          <div 
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ backgroundImage: `url('${slide.image}')` }}
+          >
+            {/* Gradiente oscuro para que el texto sea legible */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+          </div>
+          
+          <div className="absolute bottom-0 left-0 right-0 p-12 text-white">
+            <Leaf className="w-16 h-16 text-[#a3d977] mb-6 drop-shadow-md" />
+            <h2 className="text-4xl font-bold mb-4 drop-shadow-md">{slide.title}</h2>
+            <p className="text-lg text-white/90 drop-shadow max-w-md">
+              {slide.description}
+            </p>
+          </div>
+        </div>
+      ))}
+      
+      {/* Indicadores del Carrusel */}
+      <div className="absolute bottom-6 left-12 z-20 flex gap-2">
+        {CAROUSEL_SLIDES.map((_, idx) => (
+          <button
+            key={idx}
+            onClick={() => setCurrentSlide(idx)}
+            className={`w-3 h-3 rounded-full transition-all ${
+              idx === currentSlide ? 'bg-[#a3d977] w-8' : 'bg-white/50 hover:bg-white/80'
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function LoginPage() {
   return (
     <div className="flex min-h-screen relative">
@@ -171,18 +242,9 @@ export default function LoginPage() {
         Volver a la Web Principal
       </a>
 
-      {/* Lado izquierdo - Decorativo */}
-      <div className="hidden lg:flex lg:w-1/2 bg-[#006132] flex-col justify-center items-center relative overflow-hidden p-12">
-        <div className="absolute inset-0 opacity-10">
-           <div className="absolute transform rotate-45 -left-1/4 -top-1/4 w-[150%] h-[150%] bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent"></div>
-        </div>
-        <div className="relative z-10 text-center text-white">
-          <Leaf className="w-20 h-20 mx-auto mb-8 text-[#a3d977]" />
-          <h2 className="text-4xl font-bold mb-4">Bienvenido a tu<br/>Banca Virtual</h2>
-          <p className="text-lg text-white/80 max-w-md mx-auto">
-            Transacciones seguras, rápidas y al alcance de tu mano. Agrobanco te acompaña en cada paso.
-          </p>
-        </div>
+      {/* Lado izquierdo - Carrusel Automático */}
+      <div className="hidden lg:flex lg:w-1/2 bg-[#006132] flex-col justify-center items-center relative overflow-hidden">
+        <LoginCarousel />
       </div>
 
       {/* Lado derecho - Formulario */}
