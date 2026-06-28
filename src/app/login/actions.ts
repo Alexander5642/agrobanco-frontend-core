@@ -16,12 +16,11 @@ export async function login(formData: FormData) {
     return redirect('/login?error=Credenciales invalidas')
   }
 
-  // Redirección
-  if (user.rol === 'ADMIN') {
-    revalidatePath('/admin', 'layout')
-    redirect('/admin')
+  // En el CORE, solo pueden entrar ADMINS
+  if (user.rol !== 'ADMIN') {
+    return redirect('/login?error=Acceso denegado. Solo administradores.')
   }
 
-  revalidatePath('/resumen', 'layout')
-  redirect('/resumen')
+  revalidatePath('/admin', 'layout')
+  redirect('/admin')
 }
