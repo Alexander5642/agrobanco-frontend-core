@@ -1,5 +1,6 @@
-import { cookies } from 'next/headers';
+'use server'
 
+import { cookies } from 'next/headers';
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
 
 export async function getUser() {

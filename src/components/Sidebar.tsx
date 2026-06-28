@@ -82,8 +82,10 @@ export default function Sidebar() {
           </div>
           <button 
             onClick={async () => {
-              const supabase = createClient()
-              await supabase.auth.signOut()
+              try {
+                const { logoutUser } = await import('@/lib/localAuth');
+                await logoutUser();
+              } catch(e) {}
               window.location.href = '/login'
             }}
             className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
