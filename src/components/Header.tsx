@@ -1,14 +1,11 @@
 import { Bell, LogOut } from 'lucide-react'
-import { createClient } from '@/utils/supabase/server'
+import { logoutUser } from '@/lib/localAuth'
 import { redirect } from 'next/navigation'
 
 export default async function Header() {
-  const supabase = await createClient()
-
   async function signOut() {
     'use server'
-    const supabaseClient = await createClient()
-    await supabaseClient.auth.signOut()
+    await logoutUser()
     redirect('/login')
   }
 

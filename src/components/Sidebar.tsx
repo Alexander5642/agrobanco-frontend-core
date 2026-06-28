@@ -1,6 +1,5 @@
 'use client'
 
-import { createClient } from '@/utils/supabase/client'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Leaf, LayoutDashboard, Wallet, CreditCard, ArrowRightLeft, Activity, User, LogOut } from 'lucide-react'
