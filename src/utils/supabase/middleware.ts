@@ -6,7 +6,7 @@ export async function updateSession(request: NextRequest) {
   })
 
   // Verificar la cookie local en lugar de Supabase
-  const userSession = request.cookies.get('local_session_id')?.value
+  const userSession = request.cookies.get('auth_token')?.value
 
   if (
     !userSession &&
