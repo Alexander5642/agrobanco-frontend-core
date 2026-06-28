@@ -14,7 +14,7 @@ export default async function PerfilPage() {
 
   const db = readDB()
 
-  let cliente = { nombres: user.nombres, apellidos: user.apellidos, dni: user.dni, celular: user.celular || '', direccion: user.direccion || '' }
+  let cliente = { nombres: user.nombre || user.nombres, apellidos: user.apellidos || '', dni: user.dni || '', celular: user.celular || '', direccion: user.direccion || '' }
   let tarjeta = db.tarjetas.find(t => t.user_id === user.id) || null
 
   return (
