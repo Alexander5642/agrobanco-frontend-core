@@ -104,13 +104,16 @@ const defaultDB: LocalDB = {
 
 // Función para inicializar la base de datos si no existe
 function initDB() {
-  if (!fs.existsSync(DB_FILE)) {
-    // Si no existe, creamos el directorio si falta y guardamos la DB por defecto
-    const dir = path.dirname(DB_FILE);
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
+  try {
+    if (!fs.existsSync(DB_FILE)) {
+      const dir = path.dirname(DB_FILE);
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
+      }
+      fs.writeFileSync(DB_FILE, JSON.stringify(defaultDB, null, 2), 'utf-8');
     }
-    fs.writeFileSync(DB_FILE, JSON.stringify(defaultDB, null, 2), 'utf-8');
+  } catch (error) {
+    console.warn("Vercel filesystem is read-only, ignoring initDB");
   }
 }
 
