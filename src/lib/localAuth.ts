@@ -53,3 +53,28 @@ export async function logoutUser() {
   const cookieStore = await cookies();
   cookieStore.delete('auth_token');
 }
+
+export async function registerUser(userData: any) {
+  try {
+    const res = await fetch(`${API_URL}/auth/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(userData)
+    });
+    const result = await res.json();
+    
+    if (result.success && result.data) {
+      const cookieStore = await cookies();
+      cookieStore.set('auth_token', result.data.token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 60 * 60 * 24 * 7,
+        path: '/',
+      });
+      return { user: result.data.usuario, error: null };
+    }
+    return { user: null, error: new Error(result.message || 'Error en el registro') };
+  } catch (error) {
+    return { user: null, error };
+  }
+}
