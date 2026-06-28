@@ -217,10 +217,15 @@ export default function AdminDashboard({ data }: { data: any }) {
 
       {/* Tabla Premium de Casos de Crédito */}
       <div className="mt-8 bg-white p-6 rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-        <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-          <CreditCard className="w-5 h-5 text-[#008c4a]" />
-          Casos de Crédito Recientes
-        </h2>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+            <CreditCard className="w-5 h-5 text-[#008c4a]" />
+            Casos de Crédito Recientes
+          </h2>
+          <a href="/admin/solicitudes" className="text-sm font-bold text-brand hover:underline">
+            Ver todas las solicitudes &rarr;
+          </a>
+        </div>
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm text-gray-600">
             <thead className="bg-gray-50 text-xs uppercase font-semibold text-gray-500 rounded-t-lg">
@@ -234,7 +239,7 @@ export default function AdminDashboard({ data }: { data: any }) {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {(data.creditosLista || []).slice(0, 30).map((c: any, i: number) => {
+              {(data.creditosLista || []).slice(0, 5).map((c: any, i: number) => {
                 let badgeColor = 'bg-gray-100 text-gray-800';
                 if (c.estado === 'APROBADO') badgeColor = 'bg-green-100 text-green-800';
                 if (c.estado === 'EN_COMITE') badgeColor = 'bg-yellow-100 text-yellow-800';
@@ -243,7 +248,7 @@ export default function AdminDashboard({ data }: { data: any }) {
                 if (c.estado === 'VENCIDO' || c.estado === 'RECHAZADO') badgeColor = 'bg-red-100 text-red-800';
 
                 return (
-                  <tr key={i} className="hover:bg-gray-50 transition-colors group cursor-pointer">
+                  <tr key={i} onClick={() => window.location.href = `/admin/clientes/${c.user_id}`} className="hover:bg-gray-50 transition-colors group cursor-pointer">
                     <td className="px-6 py-4 font-mono text-xs text-gray-400 group-hover:text-gray-900 transition-colors">{c.id.split('-')[1]}</td>
                     <td className="px-6 py-4">
                       <div className="font-bold text-gray-900">{c.user_name}</div>
