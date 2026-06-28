@@ -1,6 +1,8 @@
 import { readDB } from '@/data/db';
 import AdminDashboard from './AdminDashboard';
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminIndex() {
   const db = readDB();
   
