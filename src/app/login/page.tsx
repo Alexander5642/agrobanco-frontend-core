@@ -115,10 +115,36 @@ function LoginForm() {
 export default function LoginPage() {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Background abstract shapes - Agrobanco Colors */}
+      {/* CSS para Animaciones */}
+      <style dangerouslySetInnerHTML={{__html: `
+        @keyframes float1 {
+          0% { transform: translate(0, 0) scale(1); }
+          33% { transform: translate(30px, -50px) scale(1.1); }
+          66% { transform: translate(-20px, 20px) scale(0.9); }
+          100% { transform: translate(0, 0) scale(1); }
+        }
+        @keyframes float2 {
+          0% { transform: translate(0, 0) scale(1); }
+          33% { transform: translate(-30px, 50px) scale(1.2); }
+          66% { transform: translate(20px, -20px) scale(0.8); }
+          100% { transform: translate(0, 0) scale(1); }
+        }
+        .animate-float-1 { animation: float1 15s ease-in-out infinite; }
+        .animate-float-2 { animation: float2 20s ease-in-out infinite; }
+        .bg-grid-pattern {
+          background-image: radial-gradient(#006132 1px, transparent 1px);
+          background-size: 30px 30px;
+        }
+      `}} />
+
+      {/* Textura de Fondo (Puntos sutiles) */}
+      <div className="absolute inset-0 bg-grid-pattern opacity-[0.03] pointer-events-none"></div>
+
+      {/* Background abstract shapes - Agrobanco Colors with Movements */}
       <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
-        <div className="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] bg-[#a3d977] rounded-full mix-blend-multiply filter blur-[120px] opacity-30"></div>
-        <div className="absolute top-[60%] -right-[10%] w-[40%] h-[60%] bg-[#006132] rounded-full mix-blend-multiply filter blur-[120px] opacity-20"></div>
+        <div className="absolute -top-[10%] -left-[10%] w-[50%] h-[60%] bg-[#a3d977] rounded-full mix-blend-multiply filter blur-[100px] opacity-40 animate-float-1"></div>
+        <div className="absolute top-[50%] -right-[10%] w-[60%] h-[70%] bg-[#006132] rounded-full mix-blend-multiply filter blur-[120px] opacity-30 animate-float-2"></div>
+        <div className="absolute top-[20%] left-[40%] w-[30%] h-[40%] bg-[#eab308] rounded-full mix-blend-multiply filter blur-[100px] opacity-10 animate-float-1" style={{ animationDelay: '2s' }}></div>
       </div>
 
       <div className="relative z-10 w-full">
