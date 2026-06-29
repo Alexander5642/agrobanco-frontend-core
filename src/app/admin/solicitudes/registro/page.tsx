@@ -79,16 +79,27 @@ export default async function RegistroSolicitudPage() {
                      <button className="px-4 py-2 bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 font-bold rounded-xl text-sm transition-colors">
                        Editar Expediente
                      </button>
-                    {/* Botón visual para enviar a la bandeja principal */}
-                    <form action={async () => {
-                         'use server'
-                         const { updateEstadoCredito } = await import('@/app/admin/actions');
-                         await updateEstadoCredito(credito.id, 'EN_COMITE');
-                    }}>
-                      <button type="submit" className="px-4 py-2 bg-brand text-white hover:bg-brand-dark font-bold rounded-xl text-sm shadow-sm transition-colors flex items-center gap-2">
-                        Enviar a Evaluación <Send className="w-4 h-4" />
-                      </button>
-                    </form>
+                    {Number(credito.monto) < 15000 ? (
+                      <form action={async () => {
+                           'use server'
+                           const { updateEstadoCredito } = await import('@/app/admin/actions');
+                           await updateEstadoCredito(credito.id, 'APROBADO');
+                      }}>
+                        <button type="submit" className="px-4 py-2 bg-emerald-600 text-white hover:bg-emerald-700 font-bold rounded-xl text-sm shadow-sm transition-colors flex items-center gap-2">
+                          Aprobar Directamente (Riesgo Bajo) <Send className="w-4 h-4" />
+                        </button>
+                      </form>
+                    ) : (
+                      <form action={async () => {
+                           'use server'
+                           const { updateEstadoCredito } = await import('@/app/admin/actions');
+                           await updateEstadoCredito(credito.id, 'EN_COMITE');
+                      }}>
+                        <button type="submit" className="px-4 py-2 bg-brand text-white hover:bg-brand-dark font-bold rounded-xl text-sm shadow-sm transition-colors flex items-center gap-2">
+                          Derivar a Comité <Send className="w-4 h-4" />
+                        </button>
+                      </form>
+                    )}
                   </div>
                 </div>
               </div>
