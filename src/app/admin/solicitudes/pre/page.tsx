@@ -31,7 +31,7 @@ export default async function PreSolicitudPage({ searchParams }: { searchParams?
       SELECT c.*, u.nombres, u.apellidos, u.dni, u.celular
       FROM creditos c 
       LEFT JOIN usuarios u ON c.user_id = u.id
-      WHERE c.estado = 'PRE_SOLICITUD'
+      WHERE c.estado = 'PRE_SOLICITUD' OR c.estado = 'PENDIENTE'
     `);
     
     const dbCreditos = result.rows.map(row => ({
