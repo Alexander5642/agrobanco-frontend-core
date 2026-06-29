@@ -90,7 +90,7 @@ export default async function AdminMoraPage({ searchParams }: { searchParams?: {
                 </div>
 
                 <div className="flex flex-col items-end gap-2">
-                  <span className={\`px-4 py-1.5 font-bold text-xs rounded-lg uppercase tracking-wider border \${credito.estado === 'CASTIGO' ? 'bg-gray-800 text-white border-gray-900' : credito.estado === 'JUDICIAL' ? 'bg-orange-100 text-orange-800 border-orange-200' : 'bg-red-100 text-red-800 border-red-200'}\`}>
+                  <span className={`px-4 py-1.5 font-bold text-xs rounded-lg uppercase tracking-wider border ${credito.estado === 'CASTIGO' ? 'bg-gray-800 text-white border-gray-900' : credito.estado === 'JUDICIAL' ? 'bg-orange-100 text-orange-800 border-orange-200' : 'bg-red-100 text-red-800 border-red-200'}`}>
                     {credito.estado}
                   </span>
                   
@@ -102,7 +102,7 @@ export default async function AdminMoraPage({ searchParams }: { searchParams?: {
                            await updateEstadoCredito(credito.id, 'JUDICIAL');
                        }}>
                          <button type="submit" className="px-3 py-1.5 bg-orange-600 text-white hover:bg-orange-700 font-bold rounded-xl text-sm shadow-sm transition-colors">
-                           Derivar a Judicial (>121d)
+                           Derivar a Judicial (&gt;121d)
                          </button>
                        </form>
                     )}
@@ -114,7 +114,7 @@ export default async function AdminMoraPage({ searchParams }: { searchParams?: {
                            await updateEstadoCredito(credito.id, 'CASTIGO');
                        }}>
                          <button type="submit" className="px-3 py-1.5 bg-gray-800 text-white hover:bg-gray-900 font-bold rounded-xl text-sm shadow-sm transition-colors">
-                           Castigar Cartera (>180d)
+                           Castigar Cartera (&gt;180d)
                          </button>
                        </form>
                     )}
