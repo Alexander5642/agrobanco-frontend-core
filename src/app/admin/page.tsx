@@ -22,7 +22,7 @@ export default async function AdminIndex() {
     
     // Add real db credits to local ones
     creditosRes.rows.forEach(c => {
-      creditos.push(c);
+      creditos.push({...c, creado_en: c.creado_en ? new Date(c.creado_en).toISOString() : null, actualizado_en: c.actualizado_en ? new Date(c.actualizado_en).toISOString() : null});
     });
   } catch (error) {
     console.error("Neon DB error, falling back to local only:", error);

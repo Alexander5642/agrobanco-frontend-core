@@ -35,7 +35,7 @@ export default async function PreSolicitudPage({ searchParams }: { searchParams?
     `);
     
     const dbCreditos = result.rows.map(row => ({
-      ...row,
+      ...row, creado_en: row.creado_en ? new Date(row.creado_en).toISOString() : null, actualizado_en: row.actualizado_en ? new Date(row.actualizado_en).toISOString() : null,
       clientes: {
         nombres: row.nombres || 'Cliente',
         apellidos: row.apellidos || 'Desconocido',
