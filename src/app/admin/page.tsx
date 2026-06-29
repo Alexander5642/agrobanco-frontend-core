@@ -1,14 +1,32 @@
 import { readDB } from '@/data/db';
 import AdminDashboard from './AdminDashboard';
+import pool from '@/lib/db';
 
 export const dynamic = 'force-dynamic';
 
 export default async function AdminIndex() {
-  const db = readDB();
+  const localDb = readDB();
   
-  // Obtener datos reales de la base de datos local
-  const numClientes = db.users.filter((u: any) => u.rol !== 'ADMIN').length;
-  const creditos = db.creditos;
+  let numClientes = localDb.users.filter((u: any) => u.rol !== 'ADMIN').length;
+  let creditos = [...(localDb.creditos || [])];
+
+  try {
+    const clientesRes = await pool.query("SELECT COUNT(*) FROM usuarios WHERE rol != 'ADMIN'");
+    numClientes += parseInt(clientesRes.rows[0].count);
+
+    const creditosRes = await pool.query(`
+      SELECT c.*, u.nombres, u.apellidos, u.dni 
+      FROM creditos c 
+      LEFT JOIN usuarios u ON c.user_id = u.id
+    `);
+    
+    // Add real db credits to local ones
+    creditosRes.rows.forEach(c => {
+      creditos.push(c);
+    });
+  } catch (error) {
+    console.error("Neon DB error, falling back to local only:", error);
+  }
 
   let total = 0;
   let vigente = 0;
@@ -16,34 +34,39 @@ export default async function AdminIndex() {
 
   if (creditos && creditos.length > 0) {
     creditos.forEach((c: any) => {
-      total += Number(c.monto);
+      const monto = Number(c.monto) || 0;
+      total += monto;
       if (c.estado === 'VENCIDO' || c.estado === 'RECHAZADO') {
-        vencida += Number(c.monto);
+        vencida += monto;
       } else {
-        vigente += Number(c.monto);
+        vigente += monto;
       }
     });
   }
 
-  // Mapear créditos con información del usuario
-  const creditosConUsuarios = (creditos || []).map((c: any) => {
-    const user = db.users.find((u: any) => u.id === c.user_id);
-    return {
-      ...c,
-      user_name: user ? `${user.nombres} ${user.apellidos}` : 'Cliente Desconocido',
-      user_dni: user ? user.dni : 'N/A'
-    };
-  });
+  // Sort and map all credits
+  const creditosConUsuarios = creditos
+    .map((c: any) => {
+      let user = localDb.users.find((u: any) => u.id === c.user_id);
+      let name = c.nombres ? `${c.nombres} ${c.apellidos}` : (user ? `${user.nombres} ${user.apellidos}` : 'Cliente Desconocido');
+      let dni = c.dni || (user ? user.dni : 'N/A');
+      return {
+        ...c,
+        user_name: name,
+        user_dni: dni
+      };
+    })
+    .sort((a, b) => new Date(b.creado_en).getTime() - new Date(a.creado_en).getTime());
 
   const dashboardData = {
     total: total > 0 ? total : 20689.56,
     vigente: total > 0 ? vigente : 8745.48,
     vencida: total > 0 ? vencida : 11944.08,
-    ratioMora: total > 0 ? ((vencida / total) * 100).toFixed(1) : 57.7,
-    numCreditos: creditos?.length || 22,
+    ratioMora: total > 0 ? ((vencida / total) * 100).toFixed(1) : '57.7',
+    numCreditos: creditos.length || 22,
     numClientes: numClientes || 22,
     creditosLista: creditosConUsuarios,
-    contactosLista: [] // Fallback
+    contactosLista: []
   };
 
   try {
@@ -61,10 +84,7 @@ export default async function AdminIndex() {
 
   return (
     <div className="p-8 max-w-7xl mx-auto min-h-screen font-sans bg-slate-50">
-      
-      {/* Componente interactivo y dinámico del Dashboard */}
       <AdminDashboard data={dashboardData} />
-      
     </div>
   );
 }

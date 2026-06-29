@@ -1,19 +1,19 @@
 import { readDB } from '@/data/db'
+import pool from '@/lib/db'
 import { FileText, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 
 export const dynamic = 'force-dynamic';
 
 export default async function PreSolicitudPage({ searchParams }: { searchParams?: { q?: string } }) {
-  const db = readDB()
-
+  const localDb = readDB()
   const q = searchParams?.q?.toLowerCase() || ''
   
-  // Jalar todos los prospectos en pre-solicitud
-  let creditos = db.creditos
-    .filter(c => c.estado === 'PRE_SOLICITUD')
-    .map(credito => {
-      const cliente = db.users.find(u => u.id === credito.user_id) || {}
+  // 1. Obtener prospectos locales
+  let creditos = localDb.creditos
+    .filter((c: any) => c.estado === 'PRE_SOLICITUD')
+    .map((credito: any) => {
+      const cliente = localDb.users.find((u: any) => u.id === credito.user_id) || {}
       return {
         ...credito,
         clientes: {
@@ -23,8 +23,34 @@ export default async function PreSolicitudPage({ searchParams }: { searchParams?
           celular: cliente.telefono || 'No registrado'
         }
       }
-    })
-    .sort((a, b) => new Date(b.creado_en).getTime() - new Date(a.creado_en).getTime())
+    });
+
+  // 2. Obtener prospectos de BD real
+  try {
+    const result = await pool.query(`
+      SELECT c.*, u.nombres, u.apellidos, u.dni, u.celular
+      FROM creditos c 
+      LEFT JOIN usuarios u ON c.user_id = u.id
+      WHERE c.estado = 'PRE_SOLICITUD'
+    `);
+    
+    const dbCreditos = result.rows.map(row => ({
+      ...row,
+      clientes: {
+        nombres: row.nombres || 'Cliente',
+        apellidos: row.apellidos || 'Desconocido',
+        dni: row.dni || '00000000',
+        celular: row.celular || 'No registrado'
+      }
+    }));
+
+    creditos = [...creditos, ...dbCreditos];
+  } catch (error) {
+    console.error("Error conectando a BD real:", error);
+  }
+
+  // Ordenar y filtrar
+  creditos = creditos.sort((a, b) => new Date(b.creado_en).getTime() - new Date(a.creado_en).getTime());
 
   if (q) {
     creditos = creditos.filter(c => {
@@ -32,7 +58,7 @@ export default async function PreSolicitudPage({ searchParams }: { searchParams?
       const apellido = String(c.clientes?.apellidos ?? '').toLowerCase();
       const dni = String(c.clientes?.dni ?? '').toLowerCase();
       return nombre.includes(q) || apellido.includes(q) || dni.includes(q);
-    })
+    });
   }
 
   const formatMoney = (amount: number) => `S/ ${Number(amount).toFixed(2)}`
@@ -41,7 +67,7 @@ export default async function PreSolicitudPage({ searchParams }: { searchParams?
     <div className="max-w-6xl mx-auto flex flex-col gap-6 p-8">
       <div className="mb-4">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Pre-solicitudes</h1>
-        <p className="text-gray-500">Evaluación inicial rápida de prospectos y leads generados</p>
+        <p className="text-gray-500">Evaluación inicial rápida de prospectos y leads generados (Datos combinados)</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
