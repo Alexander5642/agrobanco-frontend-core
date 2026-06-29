@@ -1,29 +1,32 @@
-import { readDB } from '@/data/db'
+import pool from '@/lib/db'
 import { FileText, CheckCircle2, XCircle, Users } from 'lucide-react'
 import { aprobarEnComite, rechazarEnComite } from './actions'
 
 export const dynamic = 'force-dynamic';
 
 export default async function AdminComitePage({ searchParams }: { searchParams?: { q?: string } }) {
-  const db = readDB()
-
   const q = searchParams?.q?.toLowerCase() || ''
 
-  // Jalar todos los créditos en comité
-  let creditos = db.creditos
-    .filter(c => c.estado === 'EN_COMITE')
-    .map(credito => {
-      const cliente = db.users.find(u => u.id === credito.user_id) || {}
-      return {
-        ...credito,
-        clientes: {
-          nombres: cliente.nombres || 'Cliente',
-          apellidos: cliente.apellidos || 'Desconocido',
-          dni: cliente.dni || '00000000'
-        }
-      }
-    })
-    .sort((a, b) => new Date(b.creado_en).getTime() - new Date(a.creado_en).getTime())
+  // Jalar todos los créditos en comité desde Neon DB
+  const { rows } = await pool.query(`
+    SELECT c.*, u.nombres, u.apellidos, u.dni, u.celular 
+    FROM creditos c
+    JOIN usuarios u ON c.user_id = u.id
+    WHERE c.estado = 'EN_COMITE'
+    ORDER BY c.creado_en DESC
+  `);
+
+  let creditos = rows.map(row => ({
+    ...row, 
+    creado_en: row.creado_en ? new Date(row.creado_en).toISOString() : null, 
+    actualizado_en: row.actualizado_en ? new Date(row.actualizado_en).toISOString() : null,
+    clientes: {
+      nombres: row.nombres || 'Cliente',
+      apellidos: row.apellidos || 'Desconocido',
+      dni: row.dni || '00000000',
+      celular: row.celular || 'No registrado'
+    }
+  }));
 
   if (q) {
     creditos = creditos.filter(c => 

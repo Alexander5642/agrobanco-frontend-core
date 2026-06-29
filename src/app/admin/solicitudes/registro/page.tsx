@@ -1,28 +1,29 @@
-import { readDB, writeDB } from '@/data/db'
+import pool from '@/lib/db'
 import { FileText, Send } from 'lucide-react'
 import Link from 'next/link'
 
 export const dynamic = 'force-dynamic';
 
 export default async function RegistroSolicitudPage() {
-  const db = readDB()
-
-  // Jalar todos los prospectos en proceso de registro de solicitud
-  const creditos = db.creditos
-    .filter(c => c.estado === 'REGISTRO')
-    .map(credito => {
-      const cliente = db.users.find(u => u.id === credito.user_id) || {}
-      return {
-        ...credito,
-        clientes: {
-          nombres: cliente.nombres || 'Cliente',
-          apellidos: cliente.apellidos || 'Desconocido',
-          dni: cliente.dni || '00000000',
-          celular: cliente.telefono || 'No registrado'
-        }
-      }
-    })
-    .sort((a, b) => new Date(b.creado_en).getTime() - new Date(a.creado_en).getTime())
+  const { rows } = await pool.query(`
+    SELECT c.*, u.nombres, u.apellidos, u.dni, u.celular 
+    FROM creditos c
+    JOIN usuarios u ON c.user_id = u.id
+    WHERE c.estado = 'REGISTRO'
+    ORDER BY c.creado_en DESC
+  `);
+  
+  const creditos = rows.map(row => ({
+    ...row, 
+    creado_en: row.creado_en ? new Date(row.creado_en).toISOString() : null, 
+    actualizado_en: row.actualizado_en ? new Date(row.actualizado_en).toISOString() : null,
+    clientes: {
+      nombres: row.nombres || 'Cliente',
+      apellidos: row.apellidos || 'Desconocido',
+      dni: row.dni || '00000000',
+      celular: row.celular || 'No registrado'
+    }
+  }));
 
   const formatMoney = (amount: number) => `S/ ${Number(amount).toFixed(2)}`
 
@@ -71,7 +72,7 @@ export default async function RegistroSolicitudPage() {
 
                 <div className="flex flex-col items-end gap-2">
                   <span className="px-4 py-1.5 font-bold text-xs rounded-lg uppercase tracking-wider bg-emerald-100 text-emerald-800 border border-emerald-200">
-                    {credito.estado}
+                    {credito.estado.replace('_', ' ')}
                   </span>
                   
                   <div className="flex gap-2 mt-2">
@@ -79,18 +80,10 @@ export default async function RegistroSolicitudPage() {
                        Editar Expediente
                      </button>
                     {/* Botón visual para enviar a la bandeja principal */}
-                    <form action={async (formData) => {
+                    <form action={async () => {
                          'use server'
-                         const { readDB, writeDB } = await import('@/data/db')
-                         const localDb = readDB()
-                         const index = localDb.creditos.findIndex((c: any) => c.id === credito.id)
-                         if (index !== -1) {
-                           localDb.creditos[index].estado = 'ENVIADO'
-                           writeDB(localDb)
-                         }
-                         const { revalidatePath } = await import('next/cache')
-                         revalidatePath('/admin/solicitudes/registro')
-                         revalidatePath('/admin/solicitudes')
+                         const { updateEstadoCredito } = await import('@/app/admin/actions');
+                         await updateEstadoCredito(credito.id, 'EN_COMITE');
                     }}>
                       <button type="submit" className="px-4 py-2 bg-brand text-white hover:bg-brand-dark font-bold rounded-xl text-sm shadow-sm transition-colors flex items-center gap-2">
                         Enviar a Evaluación <Send className="w-4 h-4" />

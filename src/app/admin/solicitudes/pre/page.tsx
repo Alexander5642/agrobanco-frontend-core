@@ -116,9 +116,15 @@ export default async function PreSolicitudPage({ searchParams }: { searchParams?
                   </span>
                   
                   <div className="flex gap-2 mt-2">
-                    <Link href={`/admin/solicitudes/registro?id=${credito.id}`} className="px-4 py-2 bg-brand text-white hover:bg-brand-dark font-bold rounded-xl text-sm shadow-sm transition-colors flex items-center gap-2">
-                      Pasar a Registro <ArrowRight className="w-4 h-4" />
-                    </Link>
+                    <form action={async () => {
+                      'use server';
+                      const { updateEstadoCredito } = await import('@/app/admin/actions');
+                      await updateEstadoCredito(credito.id, 'REGISTRO');
+                    }}>
+                      <button type="submit" className="px-4 py-2 bg-brand text-white hover:bg-brand-dark font-bold rounded-xl text-sm shadow-sm transition-colors flex items-center gap-2">
+                        Pasar a Registro <ArrowRight className="w-4 h-4" />
+                      </button>
+                    </form>
                   </div>
                 </div>
               </div>
