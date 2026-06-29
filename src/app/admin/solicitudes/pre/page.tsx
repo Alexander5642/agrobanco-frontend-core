@@ -27,11 +27,12 @@ export default async function PreSolicitudPage({ searchParams }: { searchParams?
     .sort((a, b) => new Date(b.creado_en).getTime() - new Date(a.creado_en).getTime())
 
   if (q) {
-    creditos = creditos.filter(c => 
-      c.clientes.nombres.toLowerCase().includes(q) || 
-      c.clientes.apellidos.toLowerCase().includes(q) || 
-      c.clientes.dni.includes(q)
-    )
+    creditos = creditos.filter(c => {
+      const nombre = String(c.clientes?.nombres ?? '').toLowerCase();
+      const apellido = String(c.clientes?.apellidos ?? '').toLowerCase();
+      const dni = String(c.clientes?.dni ?? '').toLowerCase();
+      return nombre.includes(q) || apellido.includes(q) || dni.includes(q);
+    })
   }
 
   const formatMoney = (amount: number) => `S/ ${Number(amount).toFixed(2)}`

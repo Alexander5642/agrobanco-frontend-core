@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import { Filter, Search, CreditCard, X, ChevronRight, CheckCircle2, XCircle, Banknote, CalendarDays, FileText } from 'lucide-react'
+import { Filter, Search, CreditCard, X, ChevronRight, CheckCircle2, XCircle, Banknote, CalendarDays, FileText, Leaf } from 'lucide-react'
 import { updateEstadoCredito } from '../actions'
 import Link from 'next/link'
 
