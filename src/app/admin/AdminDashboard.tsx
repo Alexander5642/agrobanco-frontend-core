@@ -34,13 +34,14 @@ export default function AdminDashboard({ data }: { data: any }) {
 
   // Datos simulados para tendencia, escalados con la data actual para que tenga sentido real
   const baseMora = vencidaVal / 4; 
+  const baseAhorros = totalCartera * 0.85;
   const trendData = [
-    { mes: 'Ene', ahorros: 4000, creditos: totalCartera * 0.4, mora: baseMora * 0.3 },
-    { mes: 'Feb', ahorros: 3000, creditos: totalCartera * 0.5, mora: baseMora * 0.4 },
-    { mes: 'Mar', ahorros: 2000, creditos: totalCartera * 0.6, mora: baseMora * 0.5 },
-    { mes: 'Abr', ahorros: 2780, creditos: totalCartera * 0.7, mora: baseMora * 0.7 },
-    { mes: 'May', ahorros: 1890, creditos: totalCartera * 0.8, mora: baseMora * 0.8 },
-    { mes: 'Jun', ahorros: 2390, creditos: totalCartera, mora: vencidaVal },
+    { mes: 'Ene', ahorros: baseAhorros * 0.45, creditos: totalCartera * 0.4, mora: baseMora * 0.3 },
+    { mes: 'Feb', ahorros: baseAhorros * 0.52, creditos: totalCartera * 0.5, mora: baseMora * 0.4 },
+    { mes: 'Mar', ahorros: baseAhorros * 0.60, creditos: totalCartera * 0.6, mora: baseMora * 0.5 },
+    { mes: 'Abr', ahorros: baseAhorros * 0.70, creditos: totalCartera * 0.7, mora: baseMora * 0.7 },
+    { mes: 'May', ahorros: baseAhorros * 0.82, creditos: totalCartera * 0.8, mora: baseMora * 0.8 },
+    { mes: 'Jun', ahorros: baseAhorros, creditos: totalCartera, mora: vencidaVal },
   ]
 
   const formatMoney = (val: number) => `S/ ${val.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
